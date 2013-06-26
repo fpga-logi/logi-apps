@@ -1,9 +1,9 @@
 #!/bin/sh
 logi_loader ./logipi_camera.bit
-pacman -S gcc
-pacman -S make
-pacman -S v4l-utils
-pacman -S libjpeg-turbo
+pacman -S --needed gcc
+pacman -S --needed make
+pacman -S --needed v4l-utils
+pacman -S --needed libjpeg-turbo
 cd ../tools/logi-mjpg-streamer/
 ./fix_dependency.sh
 make -j2
