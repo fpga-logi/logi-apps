@@ -1,9 +1,15 @@
 #!/bin/sh
 logi_loader ./logipi_camera.bit
-pacman -S --needed gcc
-pacman -S --needed make
-pacman -S --needed v4l-utils
-pacman -S --needed libjpeg-turbo
+
+DISTRO="$(cat /etc/os-release | grep "ID_LIKE=.*" | sed "s,ID_LIKE=,,")"
+echo $DISTRO
+if [ "$DISTRO" = "debian" ]; then
+apt-get install gcc make v4l-utils libjpeg-turbo
+elif [ "$DISTRO" = "arch" ]; then
+pacman -S --needed gcc make v4l-utils libjpeg-turbo
+else
+echo "unknown distro, please manually install gcc, make, v4l-utils, libjpeg-turbo"
+fi
 cd ../tools/logi-mjpg-streamer/
 ./fix_dependency.sh
 make -j2
