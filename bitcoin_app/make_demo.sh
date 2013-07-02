@@ -1,19 +1,21 @@
 #!/bin/sh
 
+DISTRO="$(cat /etc/os-release | grep "ID_LIKE=.*" | sed "s,ID_LIKE=,,")"
+echo $DISTRO
+if [ "$DISTRO" = "debian" ]; then
+apt-get install python2 python-json python-mmap
+elif [ "$DISTRO" = "arch" ]; then
+pacman -S --needed python2
+else
+echo "unknown distro, please manually install gcc, make, v4l-utils, libjpeg-turbo"
+fi
+
 git clone https://github.com/lthiery/SPI-Py.git spi_lib
 cd spi_lib
 python2 setup.py build
 python2 setup.py install
 cd ..
-DISTRO="$(cat /etc/os-release | grep "ID_LIKE=.*" | sed "s,ID_LIKE=,,")"
-echo $DISTRO
-if [ "$DISTRO" = "debian" ]; then
-apt-get install python-json python-mmap
-elif [ "$DISTRO" = "arch" ]; then
-pacman -U python-json python-mmap
-else
-echo "unknown distro, please manually install gcc, make, v4l-utils, libjpeg-turbo"
-fi
+
 logi_loader ./logipi_mining.bit
 echo "wait for the following script to end"
 echo "result should be : nonce :7a33330e "
