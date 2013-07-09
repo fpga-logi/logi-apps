@@ -4,16 +4,19 @@ DISTRO="$(cat /etc/os-release | grep "ID_LIKE=.*" | sed "s,ID_LIKE=,,")"
 echo $DISTRO
 if [ "$DISTRO" = "debian" ]; then
 apt-get install python2 python-json python-mmap
+PYTHON=python
 elif [ "$DISTRO" = "arch" ]; then
 pacman -S --needed python2
+PYTHON=python2
 else
 echo "unknown distro, please manually install gcc, make, v4l-utils, libjpeg-turbo"
+PYTHON=python
 fi
 
 git clone https://github.com/lthiery/SPI-Py.git spi_lib
 cd spi_lib
-python2 setup.py build
-python2 setup.py install
+$PYTHON setup.py build
+$PYTHON setup.py install
 cd ..
 
 logi_loader ./logipi_mining.bit
@@ -25,4 +28,4 @@ echo "3) Fill config.py with your worker configuration"
 echo "4) Launch python mark1_rpi_miner.py and wait to get rich ..."
 echo "INFO: the hashrate (~1.8MHash/s) is intentionnaly limited to prevent the FPGA from overheating."
 echo "Because of the low hashrate (compared to bigger FPGA or ASIC), expect to wait some time before getting a valid share ..."
-python2 logipi.py
+$PYTHON logipi.py
