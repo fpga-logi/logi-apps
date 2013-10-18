@@ -36,41 +36,44 @@ SETUP TO RUN THE EXAMPLE
 	ubuntu@arm:~$ sudo logi_loader bitfiles/logibone_wishbone.bit 
 3) go to the wishbone directory to experiment with the GPMC/wishbone BBB/FPGA interface
 	ubuntu@arm:~$ cd wishbone/
+4) go the wishbone directory to begin send and receiving data through the wishbone bus
+	ubuntu@arm:~$ cd Logi-apps/wishbone/
+
 
 READ REGISTER ON THE FPGA
 1) Read register 0x0000 on the FPGA
-	ubuntu@arm:~/wishbone$ sudo ./read_wishbone 0x0000
+	ubuntu@arm:~/Logi-apps/wishbone$  sudo ./read_wishbone 0x0000
 	should return 0xdead
 2) Read register 0x0001 on the FPGA
-	ubuntu@arm:~/wishbone$ sudo ./read_wishbone 0x0001
+	ubuntu@arm:~/Logi-apps/wishbone$  sudo ./read_wishbone 0x0001
 	should return 0xbeef
 
 WRITE AND READ AN UNINITIALIZED REGISTER ON THE FPGA
 1) read the uninitialized register_3 (0x0004)
-	ubuntu@arm:~/wishbone$ sudo ./read_wishbone 0x004
+	ubuntu@arm:~/Logi-apps/wishbone$  sudo ./read_wishbone 0x004
 	should return: 0x0 
 2) write a value of 0x1234 to register_3  
-	ubuntu@arm:~/wishbone$ sudo ./write_wishbone 0x0004 0x1234
+	ubuntu@arm:~/Logi-apps/wishbone$  sudo ./write_wishbone 0x0004 0x1234
 	should output: Writing 0x1234 @ 0x4 
 3) read back the contents stored in register_3
-	ubuntu@arm:~/wishbone$ sudo ./read_wishbone 0x004
+	ubuntu@arm:~/Logi-apps/wishbone$  sudo ./read_wishbone 0x004
 	should return: 0x1234 
 
 
 SETUP LED PWM REGISTER TO CONTROL THE INTENSITY OF THE LEDS
 1) Load the clock divider register with 0x0004
-	ubuntu@arm:~/wishbone$ sudo ./write_wishbone 0x0010 0x0004
+	ubuntu@arm:~/Logi-apps/wishbone$ sudo ./write_wishbone 0x0010 0x0004
 	should return: Writing 0x10 @ 0x4 
 
 2) Load the period register with 0x0800
-	ubuntu@arm:~/wishbone$ sudo ./write_wishbone 0x0012 0x0800
+	ubuntu@arm:~/Logi-apps/wishbone$  sudo ./write_wishbone 0x0012 0x0800
 	should return: Writing 0x800 @ 0x12 
 3) Load the LED1 register with the duty cycle value
-	ubuntu@arm:~/wishbone$ sudo ./write_wishbone 0x0016 0x0080
+	ubuntu@arm:~/Logi-apps/wishbone$  sudo ./write_wishbone 0x0016 0x0080
 	should return: Writing 0x80 @ 0x16 
 	you should see LED1 light up with the brightness relative to pwm_period/pwm_duty(high time)
 4) Load the LED2 register with the duty cycle value
-	ubuntu@arm:~/wishbone$ sudo ./write_wishbone 0x0018 0x0080
+	ubuntu@arm:~/Logi-apps/wishbone$  sudo ./write_wishbone 0x0018 0x0080
 	should return: Writing 0x80 @ 0x16 
 	you should see LED2 light up with the brightness relative to pwm_period/pwm_duty(high time)
 5) Experiment with setting the brightness of the LEDS by writing the the pwm_high registers
