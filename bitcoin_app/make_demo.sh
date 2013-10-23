@@ -1,9 +1,10 @@
 #!/bin/sh
 
-DISTRO="$(cat /etc/os-release | grep "ID_LIKE=.*" | sed "s,ID_LIKE=,,")"
+DISTRO="$(cat /etc/os-release | grep "^ID=.*" | sed "s,ID=,,")"
 echo $DISTRO
 if [ "$DISTRO" = "debian" ]; then
-apt-get install python2 python-json python-mmap
+sudo ap-get update
+sudo apt-get install python-dev
 PYTHON=python
 elif [ "$DISTRO" = "arch" ]; then
 pacman -S --needed python2
