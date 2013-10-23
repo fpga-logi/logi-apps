@@ -1,5 +1,9 @@
 #!/bin/sh
-logi_loader ./logipi_camera.bit
+
+read -p "What is your board version (RA1, RA2, ...)" BOARD_VERSION
+
+logi_loader ./logipi_camera_${BOARD_VERSION}.bit
+
 
 DISTRO="$(cat /etc/os-release | grep "^ID=.*" | sed "s,ID=,,")"
 echo $DISTRO
