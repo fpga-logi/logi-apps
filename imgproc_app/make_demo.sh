@@ -5,7 +5,7 @@ read -p "What is your board version (RA1, RA2, ...)" BOARD_VERSION
 logi_loader ./logipi_camera_${BOARD_VERSION}.bit
 
 
-DISTRO="$(cat /etc/os-release | grep "^ID=.*" | sed "s,ID=,,")"
+DISTRO="$(cat /etc/os-release | grep "ID_LIKE=.*" | sed "s,ID_LIKE=,,")"
 echo $DISTRO
 if [ "$DISTRO" = "debian" ]; then
 apt-get update
