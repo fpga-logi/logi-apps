@@ -1,9 +1,9 @@
 #!/bin/sh
 
-DISTRO="$(cat /etc/os-release | grep "^ID=.*" | sed "s,ID=,,")"
+DISTRO="$(cat /etc/os-release | grep "ID_LIKE=.*" | sed "s,ID_LIKE=,,")"
 echo $DISTRO
 if [ "$DISTRO" = "debian" ]; then
-sudo ap-get update
+sudo apt-get update
 sudo apt-get install python-dev
 PYTHON=python
 elif [ "$DISTRO" = "arch" ]; then
