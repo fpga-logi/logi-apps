@@ -1,7 +1,7 @@
 #!/bin/sh
 
 read -p "What is your board version (RA1, RA2, ...)" BOARD_VERSION
-read -p "Chat is your sensor version (7670, 7725, ...)" CAMERA
+read -p "What is your sensor version (7670, 7725, ...)" CAMERA
 
 logi_loader ./logipi_camera_${BOARD_VERSION}_${CAMERA}.bit
 
