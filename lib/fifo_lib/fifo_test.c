@@ -1,14 +1,48 @@
 #include "fifolib.h"
+#include <time.h>
 #include <unistd.h>
 
-unsigned char buffer[32*6*2] ;
+unsigned char buffer[256000] ;
 
 int main(int argc, char ** argv){
 	unsigned int i ;
-	if(fifo_open(0) < 0) return -1 ;
-	if(fifo_open(1) < 0) return -1 ;
-	printf("fifo 0 is %d large and contains %d tokens \n", fifo_getSize(0), fifo_getNbAvailable(0));
-	printf("fifo 1 is %d large and contains %d tokens \n", fifo_getSize(1), fifo_getNbAvailable(1));
+	long start_time, end_time ;
+	double diff_time ;
+	struct timespec cpu_time ;
+	if(fifo_open(0) < 0){
+		printf("cannot open fifo !\n"); 
+		return -1 ;
+	}
+	fifo_reset(0);
+	unsigned int size =  fifo_getSize(0) ;
+	unsigned int nb_avail = fifo_getNbAvailable(0);
+	unsigned int nb_free = fifo_getNbFree(0);
+	printf("fifo 0 of size %d contains %d tokens , %d free slots \n", size, nb_avail, nb_free);
+	while(1){
+		fifo_reset(0);
+		fifo_read(0, buffer, 4096);
+		printf("done \n");
+	}
+	//fifo_reset(0) ;
+	//return 0 ;
+	fifo_write(0, buffer, 640);
+	sleep(3);
+	//fifo_read(0, buffer, 1024);
+	size =  fifo_getSize(0) ;
+        nb_avail = fifo_getNbAvailable(0);
+        nb_free = fifo_getNbFree(0);
+	printf("fifo 0 of size %d contains %d tokens , %d free slots \n", size, nb_avail, nb_free);
+	return 0 ;
+	clock_gettime(CLOCK_REALTIME, &cpu_time);
+	start_time = cpu_time.tv_nsec ;
+	fifo_write(0, buffer, 4096) ;
+	clock_gettime(CLOCK_REALTIME, &cpu_time);
+	end_time = cpu_time.tv_nsec ;
+	diff_time = end_time - start_time ;
+	diff_time = diff_time/1000000000.0 ;
+	printf("transffered %d bytes in %f s : %f B/s \n", 4096, diff_time, 4096/diff_time);
+	printf("read and write done \n");
+	//printf("fifo 1 is %d large and contains %d tokens \n", fifo_getSize(1), fifo_getNbAvailable(1));
 	/*while(1){
 		fifo_reset(1);
 		fifo_read(1, buffer, 32*6);
@@ -29,6 +63,5 @@ int main(int argc, char ** argv){
 		}
 		sleep(1);	
 	}*/ //blob_tracking test ...
-	fifo_close(1);
 	fifo_close(0);
 }

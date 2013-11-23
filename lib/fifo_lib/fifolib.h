@@ -7,6 +7,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <errno.h>
+//#include <linux/ioctl.h>
 #include <sys/ioctl.h>
 
 #define LOGIBONE_FIFO_IOC_MAGIC 'p'
@@ -18,17 +19,30 @@
 #define LOGIBONE_FIFO_MODE _IO(LOGIBONE_FIFO_IOC_MAGIC, 5)
 #define LOGIBONE_DIRECT_MODE _IO(LOGIBONE_FIFO_IOC_MAGIC, 6)
 
+#ifdef RPI
+#define FIFO_BASE_ADDR	 0x00
+#define FIFO_CMD_OFFSET  4
+#define FIFO_SIZE_OFFSET	(FIFO_CMD_OFFSET)
+#define FIFO_NB_AVAILABLE_A_OFFSET	(FIFO_CMD_OFFSET + 1)
+#define FIFO_NB_AVAILABLE_B_OFFSET	(FIFO_CMD_OFFSET + 2)
+#define FIFO_PEEK_OFFSET	(FIFO_CMD_OFFSET + 3)
+#define FIFO_READ_OFFSET	0
+#define FIFO_WRITE_OFFSET	0
+#define FIFO_BLOCK_SIZE	4094  //max spi byte per read on raspi
+#define FIFO_SPACING 8
+#else
 #define FPGA_BASE_ADDR	0x1000000
 #define FIFO_BASE_ADDR   0x00
-#define FIFO_CMD_OFFSET  512
+#define FIFO_CMD_OFFSET  1024
 #define FIFO_SIZE_OFFSET        (FIFO_CMD_OFFSET)
-#define FIFO_NB_AVAILABLE_A_OFFSET      (FIFO_CMD_OFFSET + 1)
-#define FIFO_NB_AVAILABLE_B_OFFSET      (FIFO_CMD_OFFSET + 2)
-#define FIFO_PEEK_OFFSET        (FIFO_CMD_OFFSET + 3)
+#define FIFO_NB_AVAILABLE_A_OFFSET      (FIFO_CMD_OFFSET + 2)
+#define FIFO_NB_AVAILABLE_B_OFFSET      (FIFO_CMD_OFFSET + 4)
+#define FIFO_PEEK_OFFSET        (FIFO_CMD_OFFSET + 8)
 #define FIFO_READ_OFFSET        0
 #define FIFO_WRITE_OFFSET       0
-#define FIFO_BLOCK_SIZE 1024  //512 * 2 bytes
+#define FIFO_BLOCK_SIZE 1024  //512 * 16 bits
 #define FIFO_SPACING 1024
+#endif
 
 #define MAX_FIFO_NB 5
 

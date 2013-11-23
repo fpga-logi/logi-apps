@@ -12,12 +12,12 @@ char fifo_path [256] ;
 int direct_memory_access_init(){
 	int page_size ;	
 	int nb_page ;
-	memory_fd = open("/dev/mem", O_RDWR | O_SYNC);
+	memory_fd = open("/dev/logibone_mem", O_RDWR | O_SYNC);
 	if(memory_fd == -1){
 		printf("error opening /dev/mem \n");
 		exit(EXIT_FAILURE);
 	}
-
+/*
 	page_size = getpagesize();
 	nb_page = 0x1FFFE/page_size ;
 	gpmc_pointer = (volatile unsigned short *) mmap(0, nb_page*page_size, 
@@ -25,11 +25,13 @@ int direct_memory_access_init(){
 	PROT_WRITE, 
 	MAP_SHARED ,memory_fd, 
 	FPGA_BASE_ADDR);
+
 	if(((long) gpmc_pointer) < 0){
 		printf("cannot allocate pointer on %x \n", FPGA_BASE_ADDR);
 		return -1 ;
 	}
-	return 1 ;
+*/
+	return memory_fd ;
 }
 
 void direct_memory_access_close(){
@@ -42,7 +44,7 @@ int fifo_open(unsigned char id){
 	fifo_array[id].id = id ;
 	fifo_array[id].address = id * FIFO_SPACING ;
 	fifo_array[id].open = -1 ;
-	sprintf(fifo_path,"/dev/logibone%d", id+1);
+	sprintf(fifo_path,"/dev/logibone_fifo%d", id);
 	fd = open(fifo_path, O_RDWR | O_SYNC);
 	if(fd == -1){
 		int ret ;		
@@ -53,12 +55,14 @@ int fifo_open(unsigned char id){
 		}else{
 			ret = 1 ;		
 		}
+		fifo_array[id].id = ret ;
 		if(ret > 0){
 			 fifo_array[id].size = fifo_getSize(id) ;
 			 fifo_array[id].open = 1 ;
 			 //printf("fifo size is : %d \n",fifo_array[id].size);
 		}
 		fifo_array[id].type = user_space ;
+
 		return ret ;
 	}else{
 		printf("opened %s \n", fifo_path);
@@ -93,8 +97,9 @@ int fifo_write(unsigned char id, unsigned char * data, unsigned int count){
 		transfer_size = FIFO_BLOCK_SIZE ;
 	}
 	while(transferred < count){
-		while(fifo_getNbFree(id) < transfer_size); 
-		memcpy((void*) &gpmc_pointer[fifo_array[id].address], src_addr ,transfer_size);
+		while(fifo_getNbFree(id) < transfer_size);
+		pwrite(fifo_array[id].id, src_addr, transfer_size, fifo_array[id].address); 
+		//memcpy((void*) &gpmc_pointer[fifo_array[id].address], src_addr ,transfer_size);
 		src_addr += transfer_size ;
 		transferred += transfer_size ;
 		if((count - transferred) < FIFO_BLOCK_SIZE){
@@ -111,7 +116,7 @@ int fifo_read(unsigned char id, unsigned char * data, unsigned int count){
 		//ioctl(fifo_array[id].id, LOGIBONE_FIFO_MODE);
 		return read(fifo_array[id].id, data, count);	
 	}
-	printf("direct access read \n");
+	//printf("direct access read \n");
 	unsigned int transferred = 0 ;
 	unsigned int transfer_size = 0 ;
 	char * trgt_addr =(char *) data;
@@ -122,7 +127,8 @@ int fifo_read(unsigned char id, unsigned char * data, unsigned int count){
 	}	
 	while(transferred < count){
 		while(fifo_getNbAvailable(id) < transfer_size); 
-		memcpy(trgt_addr,(void*) &gpmc_pointer[fifo_array[id].address], transfer_size); 
+		pread(fifo_array[id].id, trgt_addr, transfer_size, fifo_array[id].address);
+		//memcpy(trgt_addr,(void*) &gpmc_pointer[fifo_array[id].address], transfer_size); 
 		trgt_addr += transfer_size ;
 		transferred += transfer_size ;
 		if((count - transferred) < FIFO_BLOCK_SIZE){
@@ -135,37 +141,45 @@ int fifo_read(unsigned char id, unsigned char * data, unsigned int count){
 }
 
 void fifo_reset(unsigned char id){
-	
+	unsigned short int dummy = 0 ;	
 	if(fifo_array[id].type == kernel_module){
 		ioctl(fifo_array[id].id, LOGIBONE_FIFO_RESET);
 		return ;
 	}
-	gpmc_pointer[fifo_array[id].address + FIFO_NB_AVAILABLE_A_OFFSET] = 0 ;
-	gpmc_pointer[fifo_array[id].address + FIFO_NB_AVAILABLE_B_OFFSET] = 0 ;
+
+	pwrite(fifo_array[id].id, &dummy, 2, fifo_array[id].address + FIFO_NB_AVAILABLE_A_OFFSET) ;
+	pwrite(fifo_array[id].id, &dummy, 2, fifo_array[id].address + FIFO_NB_AVAILABLE_B_OFFSET) ;
 }
 
 unsigned int fifo_getSize(unsigned char id){
+	unsigned short int dummy ;
 	if(fifo_array[id].type == kernel_module){
 		return ioctl(fifo_array[id].id, LOGIBONE_FIFO_SIZE);
         }
-	printf("fd lost ...\n");
-	return ( gpmc_pointer[fifo_array[id].address + FIFO_SIZE_OFFSET] * 2 );
+	pread(fifo_array[id].id, &dummy, 2, fifo_array[id].address + FIFO_SIZE_OFFSET) ;
+	return dummy ;
+	//return ( gpmc_pointer[fifo_array[id].address + FIFO_SIZE_OFFSET] * 2 );
 }
 
 unsigned int fifo_getNbFree(unsigned char id){
+	unsigned short int dummy ;
 	if(fifo_array[id].type == kernel_module){
  		return ioctl(fifo_array[id].id, LOGIBONE_FIFO_NB_FREE);
 	}
-	return (fifo_array[id].size - (gpmc_pointer[fifo_array[id].address + FIFO_NB_AVAILABLE_A_OFFSET]*2)) ;
+	pread(fifo_array[id].id, &dummy, 2, fifo_array[id].address + FIFO_NB_AVAILABLE_A_OFFSET) ;
+        return (fifo_array[id].size - dummy*2) ;
+	//return (fifo_array[id].size - (gpmc_pointer[fifo_array[id].address + FIFO_NB_AVAILABLE_A_OFFSET]*2)) ;
 }
 
 
 unsigned int fifo_getNbAvailable(unsigned char id){
-
+	unsigned short int dummy ;
 	if(fifo_array[id].type == kernel_module){
 		return ioctl(fifo_array[id].id, LOGIBONE_FIFO_NB_AVAILABLE);
 	}
-	return (gpmc_pointer[fifo_array[id].address + FIFO_NB_AVAILABLE_B_OFFSET]*2) ;
+	pread(fifo_array[id].id, &dummy, 2, fifo_array[id].address + FIFO_NB_AVAILABLE_B_OFFSET) ;
+        return dummy*2 ;
+	//return (gpmc_pointer[fifo_array[id].address + FIFO_NB_AVAILABLE_B_OFFSET]*2) ;
 }
 
 
