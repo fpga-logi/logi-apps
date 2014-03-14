@@ -8,7 +8,12 @@ if [ -f .done ]
 then
 cd ../tools/logi-mjpg-streamer/
 logi_loader ./logipi_mining.bit
-python logipi.py
+if [ "$DISTRO" = "arch" ]; then
+PYTHON=python2
+else
+PYTHON=python
+fi
+$PYTHON logipi.py
 exit
 fi
 
