@@ -1,7 +1,18 @@
 #!/bin/sh
 
+
 DISTRO="$(cat /etc/os-release | grep "ID_LIKE=.*" | sed "s,ID_LIKE=,,")"
 echo $DISTRO
+
+if [ -f .done ]
+then
+cd ../tools/logi-mjpg-streamer/
+logi_loader ./logipi_mining.bit
+python logipi.py
+exit
+fi
+
+
 if [ "$DISTRO" = "debian" ]; then
 sudo apt-get update
 sudo apt-get install python-dev
