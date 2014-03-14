@@ -1,18 +1,21 @@
 #!/bin/sh
 
+read -p "What is your board version (RA1, RA2, RA3)" BOARD_VERSION
+
+sudo logi_loader ./logipi_mining_${BOARD_VERSION}.bit
 
 DISTRO="$(cat /etc/os-release | grep "ID_LIKE=.*" | sed "s,ID_LIKE=,,")"
 echo $DISTRO
 
 if [ -f .done ]
 then
-cd ../tools/logi-mjpg-streamer/
-logi_loader ./logipi_mining.bit
+
 if [ "$DISTRO" = "arch" ]; then
 PYTHON=python2
 else
 PYTHON=python
 fi
+
 $PYTHON logipi.py
 exit
 fi
@@ -36,7 +39,6 @@ $PYTHON setup.py build
 $PYTHON setup.py install
 cd ..
 
-logi_loader ./logipi_mining.bit
 echo "wait for the following script to end"
 echo "result should be : nonce :7a33330e "
 echo "1) Create an account on mining pool (tested on btcguild and bitlc)"
