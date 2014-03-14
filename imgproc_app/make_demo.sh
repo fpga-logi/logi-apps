@@ -5,6 +5,12 @@ read -p "What is your sensor version (7670, 7725, ...)" CAMERA
 
 logi_loader ./logipi_camera_${BOARD_VERSION}_${CAMERA}.bit
 
+if [ -f .done ]
+then
+cd ../tools/logi-mjpg-streamer/
+./launch_streamer.sh 0
+exit
+fi
 
 DISTRO="$(cat /etc/os-release | grep "ID_LIKE=.*" | sed "s,ID_LIKE=,,")"
 echo $DISTRO
@@ -20,6 +26,8 @@ echo "unknown distro, please manually install gcc, make, v4l-utils, libjpeg-turb
 fi
 cd ../tools/logi-mjpg-streamer/
 make -j2
+echo "done" > .done
+
 echo "Demo will now start :"
 echo "Open a browser and connect to http://<your raspberry ip address>:8080/stream.html"
 echo "Press PB2 on logibone to switch between video source (normal, gaussian, sobel, harris)"
