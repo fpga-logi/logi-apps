@@ -36,9 +36,9 @@ fi
 git clone https://github.com/lthiery/SPI-Py.git spi_lib
 cd spi_lib
 $PYTHON setup.py build
-$PYTHON setup.py install
+sudo $PYTHON setup.py install
 cd ..
-
+echo "done" > .done
 echo "wait for the following script to end"
 echo "result should be : nonce :7a33330e "
 echo "1) Create an account on mining pool (tested on btcguild and bitlc)"
