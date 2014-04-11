@@ -11,10 +11,6 @@ $PYTHON logibone.py
 exit
 fi
 
-
-sudo apt-get update
-sudo apt-get install python-dev
-
 echo "done" > .done
 echo "wait for the following script to end"
 echo "result should be : nonce :7a33330e "
