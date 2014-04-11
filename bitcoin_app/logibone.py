@@ -61,10 +61,10 @@ class Logibone:
 	def readResult(self):
 		ret = self.readFrom(0x09,4, 1)	
 		result = bytearray()	
-		result.append(ret[1])
 		result.append(ret[0])
-		result.append(ret[3])
-		result.append(ret[2])	
+		result.append(ret[1])
+		result.append(ret[2])
+		result.append(ret[3])	
 		return result
 	
 	def readData(self):
