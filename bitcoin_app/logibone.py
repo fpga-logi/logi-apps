@@ -31,7 +31,7 @@ class Logibone:
 			
 		
 	def readFrom(self, addr, nb, inc):
-		logiRead(addr, nb)
+		return logiRead(addr, nb)
 
 	def write(self, val):
 		data_to_send = []
