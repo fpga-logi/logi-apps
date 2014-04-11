@@ -3,10 +3,9 @@
 BOARD_VERSION=R1
 sudo logi_loader ./logibone_mining_${BOARD_VERSION}.bit
 
-
+PYTHON=python
 if [ -f .done ]
 then
-PYTHON=python
 $PYTHON logibone.py
 exit
 fi
