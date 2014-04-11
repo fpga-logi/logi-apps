@@ -23,7 +23,7 @@ class Logibone:
 		else:
 			i = 0
 			for v in vals:
-                                transfer_tuple = transfer_tuple + (v,)
+                                transfer_tuple = (v,) + transfer_tuple
                         	i = i + 1
 				if i%2 == 0:
 					logiWrite(addr, transfer_tuple)
