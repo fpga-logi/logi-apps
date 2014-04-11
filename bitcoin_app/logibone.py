@@ -79,19 +79,19 @@ class Logibone:
 	
 
 if __name__ == "__main__":
-	logipi = Logipi()
+	logibone = Logibone()
 	try:	
-		logipi.writeTo(0x0000, sha_test, 0)
-		logipi.writeTo(0x0000, sha_data, 0)	
-		status = logipi.readState()
+		logibone.writeTo(0x0000, sha_test, 0)
+		logibone.writeTo(0x0000, sha_data, 0)	
+		status = logibone.readState()
 		while status[3] == 0:
-			status = logipi.readState()
+			status = logibone.readState()
 			print status
-			logipi.writeLoop(0x0055)
+			logibone.writeLoop(0x0055)
 			time.sleep(2)
-			logipi.writeLoop(0x00AA)
+			logibone.writeLoop(0x00AA)
 			time.sleep(2)
-		print "nonce :%s \n" % binascii.hexlify(logipi.readResult())
+		print "nonce :%s \n" % binascii.hexlify(logibone.readResult())
 	except KeyboardInterrupt:
 		print("Terminated by Ctrl+C")
 		exit(0)
