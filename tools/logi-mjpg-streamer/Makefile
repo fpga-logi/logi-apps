@@ -11,7 +11,7 @@ CC = gcc
 
 CFLAGS += -O2 -DLINUX -D_GNU_SOURCE -Wall
 #CFLAGS += -O2 -DDEBUG -DLINUX -D_GNU_SOURCE -Wall
-LFLAGS += -lpthread -ldl -ljpeg
+LFLAGS += -lpthread -ljpeg -ldl
 
 APP_BINARY=mjpg_streamer
 OBJECTS=mjpg_streamer.o utils.o
@@ -61,7 +61,7 @@ output_http.so: mjpg_streamer.h utils.h
 #	cp plugins/input_gspcav1/input_gspcav1.so .
 
 $(APP_BINARY): mjpg_streamer.c mjpg_streamer.h mjpg_streamer.o utils.c utils.h utils.o
-	$(CC) $(CFLAGS) $(LFLAGS) $(OBJECTS) -o $(APP_BINARY)
+	$(CC) $(CFLAGS) $(OBJECTS) -o $(APP_BINARY) $(LFLAGS)
 	chmod 755 $(APP_BINARY)
 
 # useful to make a backup "make tgz"

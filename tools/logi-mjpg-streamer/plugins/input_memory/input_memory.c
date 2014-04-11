@@ -42,8 +42,8 @@
 #include "../../mjpg_streamer.h"
 #include "../../utils.h"
 #include "jpeg_func.h"
-#include "fifolib.h"
-
+#include "wishbone_wrapper.h"
+#include "config.h"
 
 #define INPUT_PLUGIN_NAME "MEMORY input plugin"
 #define MAX_ARGUMENTS 32
@@ -59,6 +59,8 @@ char * picture_format [] = {"640x480", "320x240", "160x120"};
 #define NB_CHAN 2
 #define COLOR_MODE
 #define FIFO_ID 0
+
+#define NB_GRAB 1
 
 /* private functions and variables to this plugin */
 static pthread_t   worker;
@@ -198,7 +200,6 @@ int input_stop(void)
 {
     DBG("will cancel input thread\n");
     pthread_cancel(worker);
-    fifo_close(1);
     return 0;
 }
 
@@ -213,11 +214,6 @@ int input_run(void)
     if(pglobal->buf == NULL) {
         fprintf(stderr, "could not allocate memory\n");
         exit(EXIT_FAILURE);
-    }
-    fifo_open(fifo_id);
-    if( fifo_open(fifo_id) < 0){
-    	fprintf(stderr, "could not open fifo !  (try sudo ...)\n");
-	exit(EXIT_FAILURE);
     }
 
     if(pthread_create(&worker, 0, worker_thread, NULL) != 0) {
@@ -254,12 +250,14 @@ Return Value: NULL
 void *worker_thread(void *arg)
 {
     int i = 0;
+    unsigned int nb = 0 ;
     float y, u, v ;
     float r, g, b ;
     int remaining ; 
     char * fPointer ;
     int outlen = 0;
     int vsync = 0 ;
+    unsigned short cmd_buffer[8] ;
     unsigned short vsync1, vsync2 ;
     unsigned char * start_buffer, * end_ptr;
     /* set cleanup handler to cleanup allocated ressources */
@@ -267,13 +265,27 @@ void *worker_thread(void *arg)
 
     while(!pglobal->stop) {
 	pthread_mutex_lock(&pglobal->db);
-	//TODO: need to iterate to get the vsync signal and then grab a full frame
-	fifo_reset(fifo_id);	
-	fifo_read(fifo_id, grab_buffer, image_width*image_height*3*NB_CHAN);
+	cmd_buffer[0] = 0 ;
+        cmd_buffer[1] = 0 ;
+        cmd_buffer[2] = 0 ;
+        wishbone_write((unsigned char *) cmd_buffer, 6, FIFO_ADDR+FIFO_CMD_OFFSET); //reseting fifo
+        /*wishbone_read((unsigned char *) cmd_buffer, 6, FIFO_ADDR+FIFO_CMD_OFFSET); //reading fifo state
+        printf("fifo size : %d, free : %d, available : %d \n", cmd_buffer[0], cmd_buffer[1], cmd_buffer[2]);
+	*/
+	nb = 0 ;
+        while(nb < (((image_width)*(image_height)*NB_CHAN)+4)*NB_GRAB){
+                wishbone_read((unsigned char *) cmd_buffer, 6, FIFO_ADDR+FIFO_CMD_OFFSET);
+                while(cmd_buffer[2] < SINGLE_ACCESS_SIZE/2){
+                         wishbone_read((unsigned char *) cmd_buffer, 6, FIFO_ADDR+FIFO_CMD_OFFSET);
+                }
+                wishbone_read(&grab_buffer[nb], SINGLE_ACCESS_SIZE, FIFO_ADDR);
+                nb += SINGLE_ACCESS_SIZE ;
+        }
+
 	i = 0 ;
 	vsync = 0 ;
 	start_buffer = grab_buffer ;
-	end_ptr = &start_buffer[image_width*image_height*NB_CHAN*3];
+	end_ptr = &start_buffer[((image_width*image_height*NB_CHAN)+4)*NB_GRAB];
 	vsync1 = *((unsigned short *) start_buffer) ;
 	vsync2 = *((unsigned short *) &start_buffer[(image_width*image_height*NB_CHAN)+2]) ;
 	while(vsync1 != 0x55AA && vsync2 != 0x55AA && start_buffer < end_ptr){
@@ -305,12 +317,12 @@ void *worker_thread(void *arg)
 			rgb_buffer[(i*3)+2] = (unsigned char) abs(min(b, 255)) ;
 		} 
 		
-		if(!write_jpegmem_rgb(rgb_buffer, image_width, image_height, &pglobal->buf, &outlen, 100)){
+		if(!write_jpegmem_rgb(rgb_buffer, image_width, image_height, &pglobal->buf, &outlen, 70)){
 			printf("compression error !\n");	
 			exit(EXIT_FAILURE);
 		}
 		#else
-		if(!write_jpegmem_gray(fPointer, image_width, image_height, &pglobal->buf, &outlen, 100)){
+		if(!write_jpegmem_gray(fPointer, image_width, image_height, &pglobal->buf, &outlen, 70)){
 			printf("compression error !\n");	
 			exit(EXIT_FAILURE);
 		}
