@@ -52,10 +52,10 @@ class Logibone:
 	def readState(self):
 		ret = self.readFrom(0x08, 2, 0)
 		state = []		
-		state.append(ret[0]>>2)
-		state.append((ret[1]>>2) & 0x00FF)
-		state.append(ret[1] & 0x01) # error
-		state.append((ret[1]>>1) & 0x01)# hit !	
+		state.append(ret[1]>>2)
+		state.append((ret[0]>>2) & 0x00FF)
+		state.append(ret[0] & 0x01) # error
+		state.append((ret[0]>>1) & 0x01)# hit !	
 		return state
 
 	def readResult(self):
