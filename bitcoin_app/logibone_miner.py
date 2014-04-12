@@ -218,7 +218,7 @@ class Miner(object):
     self.lastlongpoll = datetime.datetime.utcnow()
     self.fpgaspuriousack = False
     print "Connecting to FPGA \n"
-    self.fpga = Logipi()
+    self.fpga = Logibone()
     self.log("Measuring FPGA performance... ")
     starttime = datetime.datetime.utcnow()
     self.mine(Job(None, binascii.unhexlify("1625cbf1a5bc6ba648d1218441389e00a9dc79768a2fc6f2b79c70cf576febd0"), "\0" * 64 + binascii.unhexlify("4c0afa494de837d81a269421"), binascii.unhexlify("7bc2b302")))
