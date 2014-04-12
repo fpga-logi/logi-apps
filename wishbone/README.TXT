@@ -17,14 +17,14 @@ example : sudo write_wishbone 0x0004 0xBEEF
 WISHBONE ADDRESSES ********************************************************************************
 address	   |	name	   |	note	|
 0x0000	     register_0        read :0xDEAD
-0x0002	     register_1	       read : 0xBEEF 
-0x0004	     register_3	       read/write register
-0x0006	     register_4	       write pmod2/read pmod1 and switches
-0x0010	     pwm_divider       system_clock divider for pwm
-0x0012	     pwm_period	       pwm signal period
-0x0014	     pwm0_high	       high time for pwm0 (unconnected)
-0x0016	     pwm1_high	       high time for pwm1 connected to LED0
-0x0018	     pwm2_hight	       high time for pwm2 connected to LED1
+0x0001	     register_1	       read : 0xBEEF 
+0x0002	     register_3	       read/write register
+0x0003	     register_4	       write pmod2/read pmod1 and switches
+0x0008	     pwm_divider       system_clock divider for pwm
+0x0009	     pwm_period	       pwm signal period
+0x000A	     pwm0_high	       high time for pwm0 (unconnected)
+0x000B	     pwm1_high	       high time for pwm1 connected to LED0
+0x000C	     pwm2_hight	       high time for pwm2 connected to LED1
 
 
 WISHBONE WALK-THROUGH EXAMPLES **********************************************************************
