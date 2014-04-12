@@ -10,7 +10,8 @@ $PYTHON logibone.py
 exit
 fi
 
-echo "done" > .done
+touch .done
+
 echo "wait for the following script to end"
 echo "result should be : nonce :7a33330e "
 echo "1) Create an account on mining pool (tested on btcguild)"
