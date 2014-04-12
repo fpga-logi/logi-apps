@@ -1,5 +1,7 @@
 #!/bin/sh
 
+CUR_DIR=`pwd`
+
 read -p "What is your sensor version (7670, 7725, ...)" CAMERA
 
 BOARD_VERSION=R1
@@ -18,7 +20,8 @@ ln -s /usr/include/linux/videodev2.h   /usr/include/linux/videodev.h
 
 cd ../tools/logi-mjpg-streamer/
 make -j2
-echo "done" > .done
+
+touch ${CUR_DIR}/.done
 
 echo "Demo will now start :"
 echo "Open a browser and connect to http://<your beaglebone ip address>:8080/stream.html"
