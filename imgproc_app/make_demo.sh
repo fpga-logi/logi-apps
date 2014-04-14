@@ -1,5 +1,7 @@
 #!/bin/sh
 
+CUR_DIR=`pwd`
+
 #read -p "What is your board version (RA1, RA2, ...)" BOARD_VERSION
 read -p "What is your sensor version (7670, 7725, ...)" CAMERA
 
@@ -25,9 +27,11 @@ ln -s /usr/include/libv4l1-videodev.h   /usr/include/linux/videodev.h
 else
 echo "unknown distro, please manually install gcc, make, v4l-utils, libjpeg-turbo"
 fi
+
 cd ../tools/logi-mjpg-streamer/
 make -j2
-echo "done" > .done
+
+touch ${CUR_DIR}/.done
 
 echo "Demo will now start :"
 echo "Open a browser and connect to http://<your raspberry ip address>:8080/stream.html"
