@@ -11,10 +11,11 @@ if [ -f .done ]
 then
 cd ../tools/logi-mjpg-streamer/
 echo "\nDEMO NOW RUNNING ***************************************************************************"
-echo "Demo will now start :"
-echo "Open a browser and connect to http://<your beaglebone ip address>:8080/stream.html"
-echo "Use switches on the logibone to switch between video source (normal, gaussian, sobel, harris)"
-echo "Press ctrl-c to end demo"
+echo "* Demo will now start :"
+echo "* Open a browser and connect to http://<your beaglebone ip address>:8080/stream.html"
+echo "* Use switches on the logibone to switch between video processing modes (normal, gaussian, sobel, harris)"
+echo "* full documentation on this app:\nhttp://valentfx.com/wiki/index.php?title=LOGI_-_Image_Processing_-_Project"
+echo "* Press ctrl-c to end demo"
 echo "END INSTRUCTIONS ***************************************************************************\n"
 ./launch_streamer.sh 0
 exit
@@ -29,11 +30,13 @@ make -j2
 
 touch ${CUR_DIR}/.done
 
-
 echo "\nDEMO NOW RUNNING ***************************************************************************"
-echo "Demo will now start :"  
-echo "Open a browser and connect to http://<your beaglebone ip address>:8080/stream.html"
-echo "Use switches on the logibone to switch between video source (normal, gaussian, sobel, harris)"
-echo "Press ctrl-c to end demo"  
+echo "* Demo will now start :"
+echo "* Open a browser and connect to http://<your beaglebone ip address>:8080/stream.html"
+echo "* Use switches on the logibone to switch between video processing modes (normal, gaussian, sobel, harris)"
+echo "* full documentation on this app:\nhttp://valentfx.com/wiki/index.php?title=LOGI_-_Image_Processing_-_Project"
+echo "* Press ctrl-c to end demo"
 echo "END INSTRUCTIONS ***************************************************************************\n"
+
+
 ./launch_streamer.sh 0
