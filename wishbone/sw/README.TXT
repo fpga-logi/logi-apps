@@ -1,41 +1,39 @@
 OVERVIEW ********************************************************************************************
+WISHBONE ADDRESSES ************************************************************$
+address    |    name       |    note    |
+0x0000       register_0        read :0xDEAD
+0x0001       register_1        read : 0xBEEF
+0x0002       register_3        read/write register
+0x0003       register_4        write pmod2/read pmod1 and switches
+0x0008       pwm_divider       system_clock divider for pwm
+0x0009       pwm_period        pwm signal period
+0x000A       pwm0_high         high time for pwm0 (unconnected)
+0x000B       pwm1_high         high time for pwm1 connected to LED0
+0x000C       pwm2_hight        high time for pwm2 connected to LED1
+
+
+
+* USING THE PYTHON WISHBONE WRAPPER APIs *********************************************************************************************
+The simplest way to read and write data to the FPGA is using is using the high level python wishbone API ca$
+
+Running the demo:  The user can directly run the wishbone demo by running the test_wishbone.py scrip:
+$ "sudo python2 test_wishbone.py"
+
+
+* USING THE C WISHBONE DRIVERS ********************************************************************************************************
 need to compile read/write tools on beaglebone with the following commands (too lazy to write the Makefile):
 gcc -o write_wishbone write_wishbone.c
 gcc -o read_wishbone read_wishbone.c
 
-read tool usage :
-
+* read tool usage :
 sudo read_wishbone <hex address>
-example : sudo read_wishbone 0x0004
+example : sudo read_wishbone 0x0001
 
-write tool usage:
-
+* write tool usage:
 sudo write_wishbone <hex address> <hex value>
-example : sudo write_wishbone 0x0004 0xBEEF 
+example : sudo write_wishbone 0x0001 0xBEEF 
 
-
-WISHBONE ADDRESSES ********************************************************************************
-address	   |	name	   |	note	|
-0x0000	     register_0        read :0xDEAD
-0x0001	     register_1	       read : 0xBEEF 
-0x0002	     register_3	       read/write register
-0x0003	     register_4	       write pmod2/read pmod1 and switches
-0x0008	     pwm_divider       system_clock divider for pwm
-0x0009	     pwm_period	       pwm signal period
-0x000A	     pwm0_high	       high time for pwm0 (unconnected)
-0x000B	     pwm1_high	       high time for pwm1 connected to LED0
-0x000C	     pwm2_hight	       high time for pwm2 connected to LED1
-
-
-WISHBONE WALK-THROUGH EXAMPLES **********************************************************************
-
-SETUP TO RUN THE EXAMPLE
-1) setup the BBB device tree
-	ubuntu@arm:~$ sudo ./setup_device-tree.sh 
-2) load the fpga bit file
-	ubuntu@arm:~$ sudo logi_loader bitfiles/logibone_wishbone.bit 
-3) go to the wishbone directory to experiment with the GPMC/wishbone BBB/FPGA interface
-	ubuntu@arm:~$ cd wishbone/
+WISHBONE WALK-THROUGH EXAMPLES *********************************************************************************************************
 
 READ REGISTER ON THE FPGA
 1) Read register 0x0000 on the FPGA
@@ -58,7 +56,7 @@ WRITE AND READ AN UNINITIALIZED REGISTER ON THE FPGA
 
 
 SETUP LED PWM REGISTER TO CONTROL THE INTENSITY OF THE LEDS
-1) Load the clock divider register with 0x0004
+1) Load the clock divider register with 0x0008
 	ubuntu@arm:~/wishbone$ sudo ./write_wishbone 0x0008 0x0004
 	should return: Writing 0x4 @ 0x8 
 
