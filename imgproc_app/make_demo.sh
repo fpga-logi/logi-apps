@@ -10,6 +10,12 @@ sudo logi_loader ./logibone_camera_${BOARD_VERSION}_${CAMERA}.bit
 if [ -f .done ]
 then
 cd ../tools/logi-mjpg-streamer/
+echo "\nDEMO NOW RUNNING ***************************************************************************"
+echo "Demo will now start :"
+echo "Open a browser and connect to http://<your beaglebone ip address>:8080/stream.html"
+echo "Use switches on the logibone to switch between video source (normal, gaussian, sobel, harris)"
+echo "Press ctrl-c to end demo"
+echo "END INSTRUCTIONS ***************************************************************************\n"
 ./launch_streamer.sh 0
 exit
 fi
@@ -23,9 +29,11 @@ make -j2
 
 touch ${CUR_DIR}/.done
 
-echo "Demo will now start :"
+
+echo "\nDEMO NOW RUNNING ***************************************************************************"
+echo "Demo will now start :"  
 echo "Open a browser and connect to http://<your beaglebone ip address>:8080/stream.html"
 echo "Use switches on the logibone to switch between video source (normal, gaussian, sobel, harris)"
-echo "Press ctrl-c to end demo"
-
+echo "Press ctrl-c to end demo"  
+echo "END INSTRUCTIONS ***************************************************************************\n"
 ./launch_streamer.sh 0
