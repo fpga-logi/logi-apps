@@ -8,5 +8,5 @@ t = 0
 while True:
 	val = abs(int(0x0800 * math.sin(t)))
 	logiWrite(0x000B, ((val & 0x00FF), (val >> 7)))
-	time.sleep(0.1)
-	t = t + 0.1
+	time.sleep(0.01)
+	t = t + 0.01
