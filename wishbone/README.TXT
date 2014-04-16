@@ -12,6 +12,8 @@ address    |    name       |    note    |
 0x000B       pwm1_high         high time for pwm1 connected to LED0
 0x000C       pwm2_hight        high time for pwm2 connected to LED1
 
+* For full documentatiuon See: http://valentfx.com/wiki/index.php?title=LOGI_-_Wishbone_-_Project  
+
 * USING THE PYTHON WISHBONE WRAPPER APIs *********************************************************************************************
 The simplest way to read and write data to the FPGA is using is using the high level python wishbone API ca$
 

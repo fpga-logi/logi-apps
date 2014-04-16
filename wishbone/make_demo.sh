@@ -5,10 +5,11 @@ logi_loader logibone_wishbone_r1.bit
 cd sw
 make
 
-echo "\nNotes*************************************************************************************"
-echo "* Read through the sw/README file to understand how to control the peripheral connected on the wishbone bus."
+echo "\nNotes**********************************************************************"
+echo "* Read through the README.TXT file to understand how to control the peripheral connected on the wishbone bus."
+echo "* The user can use C or Python to talk to the FPGA (see README.TXT)"
 echo "* Use the test_wishbone.py python file to understand how to use the logi python class to access the wishbone address space." 
-echo "* 1) user can run the python wishbone with command 'sudo python2 test_wishbone.py' " 
-echo "* 2) user can run the c code wishbone fucntiona call by using the /sw ./write_wishbone and ./read_wishbone  - See the sw/README.TXT"
-echo "********************************************************************************************\n"
+echo "* Use the sw/ read_wishbone and write_wishbone c executables to talk to the FPGA"
+echo "* See README.TXT and http://valentfx.com/wiki/index.php?title=LOGI_-_Wishbone_-_Project for full documentation"
+echo "***************************************************************************\n"
 
