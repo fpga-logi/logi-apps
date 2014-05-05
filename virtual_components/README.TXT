@@ -13,7 +13,7 @@
 * VPB(1): 1 = reset count : pushing virtual PB0 will reset the SSEG and binary count
 * VPB(3): 1 = will enable the Real LED on FPGA board when VDIPSW(6) is = 1.
 * VPB(4): 1 = will enable the Real LED on FPGA board when VDIPSW(6) is = 1.  
-* READ COMPONENTS FUNCTIONALITY:
+* REAL COMPONENTS FUNCTIONALITY:
 * DIPSW(1:2): The Virtual LED 7 and 8 will follow the DIP SW value when VDIPSW(6) is = '1'
 * SW(2): This will reset the count variable
 * LED(1:2): Will display the low 2 bits of the count when VDIPSW(7)= '1' or will display VPB(3:4) when DIPSW(6) = '1'
