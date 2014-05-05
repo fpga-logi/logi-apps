@@ -1,17 +1,14 @@
-Cheapscope Setup:
-
-- install libncurses:	sudo apt-get install libncurses5-dev 
-- build cheapscope: 	gcc -o cheapscope cheapscope.c -lncurses
-- ensure that rpi ttyAMA0 is not being used by system (used by default): 
-
-- Easy utility to all user access to serial port 
-- install using: 
-sudo wget https://raw.github.com/lurch/rpi-serial-console/master/rpi-serial-console -O /usr/bin/rpi-serial-console && sudo chmod +x /usr/bin/rpi-serial-console
-- if already installed: 
-cp rpi-serial-console /usr/bin/rpi-serial-console && sudo chmod +x /usr/bin/rpi-serial-console
-
-- Check the status:  	rpi-serial-console status
-- if enabled user must disable the ttyama0 port(make available for user access): sudo rpi-serial-console disable
-- reboot
-- run the cheapscope: 	./cheapscope /dev/ttyAMA0
-
+*************************************************************************************************************
+* LOGI Cheapscope (by Hamster) Logic Analyzer ******** *******************************************************
+* REQUIRMENT: Best graphics are seen when running on RASPBIAN DESKTOP, but will work on SSH terminal
+* DOCUMENTATION: For full documentation see: http://valentfx.com/wiki/index.php?title=LOGI_-_Hamster_Cheapscope_Logic_Analyzer_-_Project and http://hamsterworks.co.nz/mediawiki/index.php/CheapScope
+* DESCRIPTION:  ************************
+* Cheapscope is a hardware buffering implementation that is constantly monitoring predefined FPGA signals.  The user can set a pre-defined trigger pattern that once detected, writes the buffered signal data to the Raspberry Pi through it’s UART connection.  The Raspberry Pi host software receives the buffered data and creates visual representation of the data directly within a terminal window.  The user then has options to scroll through the channel data, view and interpret the captured channel data.
+* BASIC INSTRUCTIONS  ******************
+* Run make_demo.sh from the cheapscope directory.  This will disable the ttyAMA0 port the first time it is run.  It will restart the Raspberry Pi and you will need to run make_demo.sh a second time.  
+* Push PB1 to capture the data and it will be displayed in the terminal window.  
+* Resize the window to display all channels
+* Scroll through the capture data using the left and right keyboard keys
+* Press PB1 to continue to capture new snapshots
+* Press N to view buffered more snapshot data
+**************************************************************************************************************
