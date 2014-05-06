@@ -10,15 +10,8 @@ sudo logi_loader ./logipi_camera_${BOARD_VERSION}_${CAMERA}.bit
 
 if [ -f .done ]
 then
+cat README.TXT
 cd ../tools/logi-mjpg-streamer/
-echo "\nDEMO NOW RUNNING ***************************************************************************"
-echo "* Demo will now start :"
-echo "* Open a browser and connect to http://<your beaglebone ip address>:8080/stream.html"
-echo "* Push PB1 to switch between video processing modes (normal, gaussian, sobel, harris)"
-echo "* full documentation on this app:\nhttp://valentfx.com/wiki/index.php?title=LOGI_-_Image_Processing_-_Project"
-echo "* Press ctrl-c to end demo"
-echo "END INSTRUCTIONS ***************************************************************************\n"
-
 ./launch_streamer.sh 0
 exit
 fi
