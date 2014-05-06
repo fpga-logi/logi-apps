@@ -1,13 +1,8 @@
-Blink LED App *************************************************************************
+LOGI-EDU Demo  *************************************************************************
 
-* Description **************
-This is a "hello world" demo for the LOGI FPGA.  This is shows the functioning nuts and bolts of the Pi/Bone and LOGI FPGA.  An bitstream in loaded using the logi_loader and the FPGA begins to run.
-
-See the blink LED wiki page for full documentation:
-http://valentfx.com/wiki/index.php?title=LOGI_-_LED_Blink_-_Project
-
-*Instructions *************
-Run the demo by running the make_demo.sh scrip:
-sudo ./make_demo.sh
-ubuntu@arm:~/Logi-apps/blink_led_app$ 
+*Description ************************************************************
+* This a demo that will show some of the fucntions of the EDU board including 1) VGA Pong game 2) VGA bars color and gray 3) PS/2 mouse 4) NES controllers 5) audio.
+* See the blink LED wiki page for full documentation: http://valentfx.com/wiki/index.php?title=LOGI_-_EDU_Demo_-_Project
+* Use the PB, SW to change and show functionality.  Plug in VGA, PS/2 mouse to port1, NES controllers to port1 or 2, speakers or earphones to audio jack
+*************************************************************************
 
