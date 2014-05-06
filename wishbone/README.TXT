@@ -1,4 +1,7 @@
-OVERVIEW ********************************************************************************************
+*************************************************************************************************************
+* LOGI Wishbone demo ************************ ***************************************************************
+* REQUIRMENT: Must have logi-tools installed
+* DOCUMENTATION: with step by step: http://valentfx.com/wiki/index.php?title=LOGI_-_Wishbone_-_Project
 WISHBONE ADDRESSES ************************************************************$
 address    |    name       |    note    |
 0x0000       register_0        read :0xDEAD
@@ -11,7 +14,6 @@ address    |    name       |    note    |
 0x000B       pwm1_high         high time for pwm1 connected to LED1
 0x000C       pwm2_high         high time for pwm2 connected to LED0
 
-* For full documentatiuon See: http://valentfx.com/wiki/index.php?title=LOGI_-_Wishbone_-_Project  
 
 * USING THE PYTHON WISHBONE WRAPPER APIs *********************************************************************************************
 The simplest way to read and write data to the FPGA is using is using the high level python wishbone API ca$
