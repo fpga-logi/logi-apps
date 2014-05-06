@@ -18,7 +18,7 @@ echo "...................building cheapscope ................"
 
 
 echo ".............We must disable ttyAMA0 and restart.........."
-./rpi-serial-consol disable
+./rpi-serial-console disable
 echo "YOU MUST RESTART THE RPI BEFORE RUNNING THIS DEMO (restart with ttyAMA0 disabled)"
 echo "done" > .done
 
