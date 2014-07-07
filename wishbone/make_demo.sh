@@ -13,3 +13,6 @@ echo "* Use the sw/ read_wishbone and write_wishbone c executables to talk to th
 echo "* See README.TXT and http://valentfx.com/wiki/index.php?title=LOGI_-_Wishbone_-_Project for full documentation"
 echo "***************************************************************************\n"
 
+
+cd ..
+python2 test_wishbone.py
