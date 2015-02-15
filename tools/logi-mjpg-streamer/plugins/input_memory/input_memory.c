@@ -322,6 +322,7 @@ void *worker_thread(void *arg)
 		
 	}
 	pthread_mutex_unlock(&pglobal->db);
+	usleep(200);
     }
 
     IPRINT("leaving input thread, calling cleanup function now\n");
